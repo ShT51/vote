@@ -1,4 +1,4 @@
-package com.topjava.vote.entity;
+package com.topjava.vote.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

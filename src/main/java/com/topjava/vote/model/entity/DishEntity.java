@@ -1,4 +1,4 @@
-package com.topjava.vote.entity;
+package com.topjava.vote.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,28 +6,32 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @SuperBuilder
+@DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "dish")
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper=true)
+@EqualsAndHashCode(callSuper=true, exclude = {"restaurants"})
 public class DishEntity extends AbstractBaseNamedEntity {
 
     @Column(name = "price", nullable = false)
     private double price;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
-    private RestaurantEntity restaurant;
+    
+    @ManyToMany(mappedBy = "dishes")
+    private Set<RestaurantEntity> restaurants = new HashSet<>();
+    
+    @Column(name = "available", nullable = false, columnDefinition = "bool default true")
+    private boolean available = true;
 }
