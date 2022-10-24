@@ -28,3 +28,7 @@ spring:
     console:
       enabled: false
       path: /h2
+
+logging:
+  level:
+    root: info

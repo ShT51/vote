@@ -4,6 +4,7 @@ import com.topjava.vote.model.dto.RestaurantDto;
 import com.topjava.vote.model.response.ResponseData;
 import com.topjava.vote.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
+import static com.topjava.vote.cache.VoteCacheManager.RESTAURANT_CACHE;
+
 @RestController
 @RequiredArgsConstructor
 public class RestaurantController {
@@ -27,6 +30,7 @@ public class RestaurantController {
         return ResponseData.of(restaurantService.getRestaurant(id));
     }
     
+    @Cacheable(RESTAURANT_CACHE)
     @GetMapping(value = "restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<Set<RestaurantDto>> getRestaurants() {
         return ResponseData.of(restaurantService.getRestaurants());

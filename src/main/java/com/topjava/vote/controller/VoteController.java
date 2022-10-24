@@ -6,6 +6,7 @@ import com.topjava.vote.model.response.RestaurantScore;
 import com.topjava.vote.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import static com.topjava.vote.cache.VoteCacheManager.VOTE_CACHE;
 
 @Slf4j
 @RestController
@@ -29,6 +32,7 @@ public class VoteController {
         return ResponseData.ok();
     }
     
+    @Cacheable(VOTE_CACHE)
     @GetMapping(value = "/vote/winner", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<List<RestaurantScore>> getRestaurantScore() {
         return ResponseData.of(voteService.getRestaurantScore());
