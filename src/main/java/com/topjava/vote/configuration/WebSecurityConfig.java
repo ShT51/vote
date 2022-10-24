@@ -19,7 +19,6 @@ public class WebSecurityConfig {
         http.authorizeRequests()
             .antMatchers("/register/**", "/login/**").permitAll()
             .antMatchers("/admin/**").hasRole("ADMIN")
-            .antMatchers("/vote/**").hasRole("USER")
             .anyRequest().authenticated()
             .and().formLogin()
                   .defaultSuccessUrl("/restaurants")

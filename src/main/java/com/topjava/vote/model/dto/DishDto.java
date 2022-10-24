@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Positive;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,10 +21,13 @@ import static java.util.Collections.emptySet;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DishDto {
-    
+   
     private long id;
+    @NotBlank
     private String name;
+    @Positive
     private double price;
+    
     @JsonProperty(access = Access.READ_ONLY)
     private boolean availability = true;
     

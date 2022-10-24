@@ -1,5 +1,6 @@
 package com.topjava.vote.service;
 
+import com.topjava.vote.exception.VoteException;
 import com.topjava.vote.model.dto.UserDto;
 import com.topjava.vote.model.entity.UserEntity;
 import com.topjava.vote.repository.UserRepository;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserEntityWithRoles(String email) {
         return userRepository.findByEmailWithRoles(email).orElseGet(() -> {
             log.error("User with email: '{}' not found", email);
-            throw new UnsupportedOperationException();
+            throw VoteException.exception();
         });
     }
     
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity getUserById(long id) throws UsernameNotFoundException {
         return userRepository.findById(id).orElseGet(() -> {
             log.error("User with id: '{}' not found", id);
-            throw new UnsupportedOperationException();
+            throw VoteException.exception();
         });
     }
     
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
         userRepository.findByEmailWithRoles(userDto.getEmail().toLowerCase())
                       .ifPresentOrElse(userEntity -> {
                                   log.error("User with email: '{}' is already exists", userEntity.getEmail());
-                                  throw new UnsupportedOperationException();
+                                  throw VoteException.badRequest("Someone has already used this email. Try another one");
                               },
                               () -> {
                                   UserEntity newUser = UserDto.toEntity(userDto);

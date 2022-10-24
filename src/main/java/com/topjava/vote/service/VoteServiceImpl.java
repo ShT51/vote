@@ -1,5 +1,6 @@
 package com.topjava.vote.service;
 
+import com.topjava.vote.exception.VoteException;
 import com.topjava.vote.model.entity.RestaurantEntity;
 import com.topjava.vote.model.entity.UserEntity;
 import com.topjava.vote.model.entity.VoteEntity;
@@ -36,7 +37,7 @@ public class VoteServiceImpl implements VoteService {
                               vote.setRestaurant(restaurantEntity);
                           } else {
                               log.warn("User: '{}' try to re-vote after the deadline", id);
-                              throw new UnsupportedOperationException();
+                              throw VoteException.badRequest("Sorry, too late to change your mind");
                           }
                       }, () -> voteRepository.save(new VoteEntity(LocalDate.now(), userEntity, restaurantEntity)));
     }

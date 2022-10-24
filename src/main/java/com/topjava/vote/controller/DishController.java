@@ -1,5 +1,6 @@
 package com.topjava.vote.controller;
 
+import com.topjava.vote.exception.VoteException;
 import com.topjava.vote.model.dto.DishDto;
 import com.topjava.vote.model.response.ResponseData;
 import com.topjava.vote.service.DishService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @Slf4j
@@ -33,13 +35,13 @@ public class DishController {
     }
     
     @PostMapping(value = "admin/dishes", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData<Object> createDish(@RequestBody DishDto dishDto) {
+    public ResponseData<Object> createDish(@RequestBody @Valid DishDto dishDto) {
         dishService.saveDish(dishDto);
         return ResponseData.ok();
     }
     
     @PutMapping(value = "admin/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData<DishDto> updateDish(@PathVariable long id, @RequestBody DishDto dishDto) {
+    public ResponseData<DishDto> updateDish(@PathVariable long id, @RequestBody @Valid DishDto dishDto) {
         return ResponseData.of(dishService.updateDish(id, dishDto));
     }
     
@@ -49,7 +51,7 @@ public class DishController {
             dishService.deleteDish(id);
         } catch (Exception e) {
             log.error("Try to remove dish: '{}'. Remove dish from restaurant", id);
-            throw new UnsupportedOperationException();
+            throw VoteException.badRequest("Remove dish from menu first!");
         }
         return ResponseData.ok();
     }

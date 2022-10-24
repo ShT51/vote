@@ -1,5 +1,6 @@
 package com.topjava.vote.service;
 
+import com.topjava.vote.exception.VoteException;
 import com.topjava.vote.model.entity.RoleEntity;
 import com.topjava.vote.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByName("ROLE_" + name)
                              .orElseGet(() -> {
                                  log.error("Role with name: '{}' not found", name);
-                                 throw new UnsupportedOperationException();
+                                 throw VoteException.exception();
                              });
     }
 }

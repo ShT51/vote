@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +20,7 @@ import static java.util.Collections.emptySet;
 public class RestaurantDto {
     
     private long id;
+    @NotBlank
     private String name;
     private Set<DishDto> dishes = new HashSet<>();
     
