@@ -1,0 +1,501 @@
+openapi: 3.0.1
+info:
+  title: Restaurant voting API
+  description: |
+    <p>
+    <b>Test users:</b><br>
+    <b>Admin</b>: <b>Login</b>: frodo@ring.com <b>Pass</b>: admin<br>
+    <b>User</b>: <b>Login</b>: sam@ring.com <b>Pass</b>: user<br>
+    </p>
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/vote/api/v1
+  description: Generated server url
+security:
+- basicAuth: []
+paths:
+  /admin/restaurants/{id}:
+    put:
+      tags:
+      - restaurant
+      summary: Update Restaurant data
+      operationId: updateRestaurant
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestaurantDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataRestaurantDto'
+    delete:
+      tags:
+      - restaurant
+      summary: Delete Restaurant
+      operationId: deleteRestaurant
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+  /admin/dishes/{id}:
+    get:
+      tags:
+      - dish
+      summary: Get Dish detail data
+      operationId: getDish
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataDishDto'
+    put:
+      tags:
+      - dish
+      summary: Update Dish data
+      operationId: updateDish
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DishDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataDishDto'
+    delete:
+      tags:
+      - dish
+      summary: Delete Dish soft
+      operationId: softDeleteDish
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+  /vote:
+    post:
+      tags:
+      - vote
+      summary: Vote for the favorite Restaurant for today
+      operationId: voteForRestaurant
+      parameters:
+      - name: restaurantId
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticatedUser'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+  /register:
+    post:
+      tags:
+      - account
+      summary: Register a new User
+      operationId: registerUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+  /admin/restaurants:
+    post:
+      tags:
+      - restaurant
+      summary: Create Restaurant
+      operationId: createRestaurant
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestaurantDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+  /admin/restaurants/{id}/dishes:
+    post:
+      tags:
+      - restaurant
+      summary: Add dishes to the Restaurant
+      operationId: addToMenu
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataRestaurantDto'
+    delete:
+      tags:
+      - restaurant
+      summary: Delete dishes from the Restaurant
+      operationId: removeFromMenu
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+                format: int64
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataRestaurantDto'
+  /admin/dishes:
+    get:
+      tags:
+      - dish
+      summary: Get Dish list
+      operationId: getDishes
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataListDishDto'
+    post:
+      tags:
+      - dish
+      summary: Create Dish
+      operationId: createDish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DishDto'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+  /vote/score:
+    get:
+      tags:
+      - vote
+      summary: Get Restaurant list with voting score
+      operationId: getRestaurantsScore
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataListRestaurantScore'
+  /restaurants:
+    get:
+      tags:
+      - restaurant
+      summary: Get Restaurant list
+      operationId: getRestaurants
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataListRestaurantDto'
+  /restaurants/{id}:
+    get:
+      tags:
+      - restaurant
+      summary: Get Restaurant detail data
+      operationId: getRestaurant
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataRestaurantDto'
+  /admin/dishes/{id}/hard:
+    delete:
+      tags:
+      - dish
+      summary: Delete Dish permanently
+      operationId: deleteDish
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDataObject'
+components:
+  schemas:
+    DishDto:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          type: string
+        price:
+          type: number
+          format: double
+        available:
+          type: boolean
+          readOnly: true
+    RestaurantDto:
+      required:
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          type: string
+        dishes:
+          uniqueItems: true
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/DishDto'
+    ResponseDataRestaurantDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/RestaurantDto'
+        status:
+          type: string
+        actualTimestamp:
+          type: string
+          format: date-time
+    ResponseDataDishDto:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/DishDto'
+        status:
+          type: string
+        actualTimestamp:
+          type: string
+          format: date-time
+    AuthenticatedUser:
+      type: object
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+        authorities:
+          type: array
+          items:
+            $ref: '#/components/schemas/GrantedAuthority'
+        accountNonExpired:
+          type: boolean
+        accountNonLocked:
+          type: boolean
+        credentialsNonExpired:
+          type: boolean
+        enabled:
+          type: boolean
+        userId:
+          type: integer
+          format: int64
+    GrantedAuthority:
+      type: object
+      properties:
+        authority:
+          type: string
+    ResponseDataObject:
+      type: object
+      properties:
+        data:
+          type: object
+        status:
+          type: string
+        actualTimestamp:
+          type: string
+          format: date-time
+    UserDto:
+      required:
+      - email
+      - name
+      - password
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          maxLength: 20
+          minLength: 4
+          type: string
+    ResponseDataListRestaurantScore:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestaurantScore'
+        status:
+          type: string
+        actualTimestamp:
+          type: string
+          format: date-time
+    RestaurantScore:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        score:
+          type: integer
+          format: int64
+    ResponseDataListRestaurantDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RestaurantDto'
+        status:
+          type: string
+        actualTimestamp:
+          type: string
+          format: date-time
+    ResponseDataListDishDto:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DishDto'
+        status:
+          type: string
+        actualTimestamp:
+          type: string
+          format: date-time
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
