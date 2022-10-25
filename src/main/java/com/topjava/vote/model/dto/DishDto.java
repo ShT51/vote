@@ -1,7 +1,6 @@
 package com.topjava.vote.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import com.topjava.vote.model.entity.DishEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 import static java.util.Collections.emptySet;
 
 @Data
@@ -21,14 +21,17 @@ import static java.util.Collections.emptySet;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DishDto {
-   
+    
+    @JsonProperty(access = READ_ONLY)
     private long id;
+    
     @NotBlank
     private String name;
+    
     @Positive
     private double price;
     
-    @JsonProperty(access = Access.READ_ONLY)
+    @JsonProperty(access = READ_ONLY)
     private boolean availability = true;
     
     public static DishDto fromEntity(DishEntity entity) {

@@ -1,5 +1,6 @@
 package com.topjava.vote.service;
 
+import com.topjava.vote.exception.VoteException;
 import com.topjava.vote.model.dto.DishDto;
 import com.topjava.vote.model.entity.DishEntity;
 import com.topjava.vote.repository.DishRepository;
@@ -17,6 +18,8 @@ import java.util.Set;
 @Transactional
 @RequiredArgsConstructor
 public class DishServiceImpl implements DishService {
+   
+    public static final String DISH_NOT_FOUND_ERROR = "Requested dish was not found";
     
     private final DishRepository repository;
     
@@ -38,7 +41,7 @@ public class DishServiceImpl implements DishService {
         List<DishEntity> resultList = repository.findAllById(ids);
         if (resultList.isEmpty()) {
             log.error("Dishes with ids: '{}' not found", ids);
-            throw new NoSuchElementException();
+            throw VoteException.badRequest(DISH_NOT_FOUND_ERROR);
         }
         return resultList;
     }
@@ -56,7 +59,6 @@ public class DishServiceImpl implements DishService {
         return DishDto.fromEntity(dishEntity);
     }
     
-    // TODO: проверить рестораны
     @Override
     public void deleteDish(long id) {
         repository.deleteById(getReferenceId(id));
@@ -70,7 +72,7 @@ public class DishServiceImpl implements DishService {
     private DishEntity findEntity(long id) {
         return repository.findById(id).orElseGet(() -> {
             log.error("No such dish with id: '{}'", id);
-            throw new NoSuchElementException();
+            throw VoteException.badRequest(DISH_NOT_FOUND_ERROR);
         });
     }
     
@@ -79,7 +81,7 @@ public class DishServiceImpl implements DishService {
             return repository.getReferenceById(id).getId();
         } catch (NoSuchElementException ex) {
             log.error("No such dish with id: '{}'", id);
-            throw new NoSuchElementException();
+            throw VoteException.badRequest(DISH_NOT_FOUND_ERROR);
         }
     }
     

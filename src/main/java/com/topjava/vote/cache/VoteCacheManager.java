@@ -11,7 +11,7 @@ public class VoteCacheManager {
     
     public static final String RESTAURANT_CACHE = "restaurant_cache";
     public static final String VOTE_CACHE = "vote_cache";
-    public static final String CACHE_TTL = "0 0/5 * * * *";
+    public static final String CACHE_TTL = "0 0/1 * * * *";
     private static final String CACHE_EVICTED_LOG = "Cache entity: '{}' evicted";
     
     @Scheduled(cron = CACHE_TTL)

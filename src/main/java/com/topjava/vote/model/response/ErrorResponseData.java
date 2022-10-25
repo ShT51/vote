@@ -13,14 +13,14 @@ import java.time.Instant;
 @AllArgsConstructor
 public class ErrorResponseData<T> {
     
-    public static final String ERROR = "error";
+    public static final String DEFAULT_STATUS = "error";
     
-    private T errorData;
+    private T error;
     private String status;
     private Instant actualTimestamp;
     
     public static <T> ErrorResponseData<T> of(T errorData) {
-        return new ErrorResponseData<>(errorData, ERROR, Instant.now());
+        return new ErrorResponseData<>(errorData, DEFAULT_STATUS, Instant.now());
     }
     
     @Getter

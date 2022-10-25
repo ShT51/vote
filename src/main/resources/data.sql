@@ -3,8 +3,8 @@ VALUES (1, 'ROLE_USER'),
        (2, 'ROLE_ADMIN');
 
 INSERT INTO users(name, email, password)
-VALUES ('Sam', 'sam@ring.com', '$2a$10$A/0JkxEmttxgbX3ODzisgeU7EDCsVptORdclyUCC0RIi/18KxAgxi'),
-       ('Frodo', 'frodo@ring.com', '$2a$10$ZdlMK9.IYiMZ3NCWSJKHCeNPMItqOipDOkDj8US6010E/6.7geGRS'),
+VALUES ('Sam', 'sam@ring.com', '$2a$10$w3CpKTFr9HcacOWppdeO.OqAngpIPE9PM1DtlY3c1GKvVfhL0zo0m'),
+       ('Frodo', 'frodo@ring.com', '$2a$10$1VawGVsKK6dff3ru6HYK8.iMM3TPdlZR6BJERG2KUVcrlJTrrItOK'),
        ('Pipin', 'pipin@ring.com', '$2a$10$ZdlMK9.IYiMZ3NCWSJKHCeNPMItqOipDOkDj8US6010E/6.7geGRS'),
        ('Bilbo', 'bilbo@ring.com', '$2a$10$ZdlMK9.IYiMZ3NCWSJKHCeNPMItqOipDOkDj8US6010E/6.7geGRS');
 

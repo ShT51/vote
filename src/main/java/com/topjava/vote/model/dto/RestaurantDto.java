@@ -1,5 +1,6 @@
 package com.topjava.vote.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.topjava.vote.model.entity.RestaurantEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 import static java.util.Collections.emptySet;
 
 @Data
@@ -19,9 +21,13 @@ import static java.util.Collections.emptySet;
 @AllArgsConstructor
 public class RestaurantDto {
     
+    @JsonProperty(access = READ_ONLY)
     private long id;
+    
     @NotBlank
     private String name;
+    
+    @JsonProperty(access = READ_ONLY)
     private Set<DishDto> dishes = new HashSet<>();
     
     public static RestaurantDto fromEntity(RestaurantEntity entity) {

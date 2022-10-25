@@ -44,8 +44,8 @@ public class VoteServiceImpl implements VoteService {
     
     @Override
     @Transactional(readOnly = true)
-    public List<RestaurantScore> getRestaurantScore() {
-        return voteRepository.findWinners();
+    public List<RestaurantScore> getRestaurantsScore() {
+        return voteRepository.findRestaurantsWithScore();
     }
     
     private boolean isRevotingAvailable() {

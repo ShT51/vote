@@ -19,7 +19,7 @@ public interface VoteRepository extends JpaRepository<VoteEntity, Long> {
                    GROUP BY v.restaurant.id
                    ORDER BY COUNT(v) DESC
                    """)
-    List<RestaurantScore> findWinners();
+    List<RestaurantScore> findRestaurantsWithScore();
     
     @Query(value = """
                    SELECT v FROM VoteEntity AS v

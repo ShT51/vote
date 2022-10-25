@@ -1,5 +1,6 @@
 package com.topjava.vote.service;
 
+import com.topjava.vote.exception.VoteException;
 import com.topjava.vote.model.dto.RestaurantDto;
 import com.topjava.vote.model.entity.RestaurantEntity;
 import com.topjava.vote.repository.RestaurantRepository;
@@ -8,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Slf4j
@@ -18,7 +19,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
    
-    private static final String ENTITY_NOT_FOUND_LOG = "No such restaurant with id: '{}'";
+    private static final String RESTAURANT_NOT_FOUND_LOG = "No such restaurant with id: '{}'";
+    public static final String RESTAURANT_NOT_FOUND_ERROR = "Requested restaurant was not found";
     
     private final RestaurantRepository restaurantRepository;
     private final DishService dishService;
@@ -74,24 +76,24 @@ public class RestaurantServiceImpl implements RestaurantService {
     
     private RestaurantEntity findWithDishes(long id) {
         return restaurantRepository.findWithDishesById(id).orElseGet(() -> {
-            log.error(ENTITY_NOT_FOUND_LOG, id);
-            throw new NoSuchElementException();
+            log.error(RESTAURANT_NOT_FOUND_LOG, id);
+            throw VoteException.badRequest(RESTAURANT_NOT_FOUND_ERROR);
         });
     }
     
     private RestaurantEntity findLazy(long id) {
         return restaurantRepository.findById(id).orElseGet(() -> {
-            log.error(ENTITY_NOT_FOUND_LOG, id);
-            throw new NoSuchElementException();
+            log.error(RESTAURANT_NOT_FOUND_LOG, id);
+            throw VoteException.badRequest(RESTAURANT_NOT_FOUND_ERROR);
         });
     }
     
     private long getReferenceId(long id) {
         try {
             return restaurantRepository.getReferenceById(id).getId();
-        } catch (NoSuchElementException ex) {
-            log.error(ENTITY_NOT_FOUND_LOG, id);
-            throw new NoSuchElementException();
+        } catch (EntityNotFoundException ex) {
+            log.error(RESTAURANT_NOT_FOUND_LOG, id);
+            throw VoteException.badRequest(RESTAURANT_NOT_FOUND_ERROR);
         }
     }
     

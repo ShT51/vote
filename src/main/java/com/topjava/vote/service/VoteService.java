@@ -8,5 +8,5 @@ public interface VoteService {
     
     void vote(long id, long restaurantId);
     
-    List<RestaurantScore> getRestaurantScore();
+    List<RestaurantScore> getRestaurantsScore();
 }

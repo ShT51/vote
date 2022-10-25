@@ -4,6 +4,7 @@ import com.topjava.vote.model.AuthenticatedUser;
 import com.topjava.vote.model.response.ResponseData;
 import com.topjava.vote.model.response.RestaurantScore;
 import com.topjava.vote.service.VoteService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ public class VoteController {
     
     private final VoteService voteService;
     
+    @Operation(summary = "Vote for the favorite Restaurant for today", tags = "vote")
     @PostMapping("/vote")
     public ResponseData<Object> voteForRestaurant(@AuthenticationPrincipal AuthenticatedUser user,
                                                   @RequestParam(name = "restaurantId") long id) {
@@ -32,10 +34,11 @@ public class VoteController {
         return ResponseData.ok();
     }
     
+    @Operation(summary = "Get Restaurant list with voting score", tags = "vote")
     @Cacheable(VOTE_CACHE)
-    @GetMapping(value = "/vote/winner", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData<List<RestaurantScore>> getRestaurantScore() {
-        return ResponseData.of(voteService.getRestaurantScore());
+    @GetMapping(value = "/vote/score", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData<List<RestaurantScore>> getRestaurantsScore() {
+        return ResponseData.of(voteService.getRestaurantsScore());
     }
     
 }

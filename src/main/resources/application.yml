@@ -11,7 +11,7 @@ spring:
     password:
     driver-class-name: org.h2.Driver
   jpa:
-    show-sql: true
+    show-sql: false
     open-in-view: false
     defer-datasource-initialization: true
     hibernate:
@@ -32,3 +32,7 @@ spring:
 logging:
   level:
     root: info
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
