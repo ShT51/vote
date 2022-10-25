@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface DishRepository extends JpaRepository<DishEntity, Long> {
     
     @Query("""
@@ -13,4 +15,10 @@ public interface DishRepository extends JpaRepository<DishEntity, Long> {
            """)
     @Modifying
     void softDelete(long id);
+    
+    @Query("""
+           SELECT d.id FROM DishEntity AS d
+           WHERE d.id = ?1
+           """)
+    Optional<Long> checkId(long id);
 }

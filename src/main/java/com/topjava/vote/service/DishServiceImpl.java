@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -31,7 +29,7 @@ public class DishServiceImpl implements DishService {
     
     @Override
     @Transactional(readOnly = true)
-    public Set<DishDto> getDishes() {
+    public List<DishDto> getDishes() {
         return DishDto.fromEntity(repository.findAll());
     }
     
@@ -61,12 +59,12 @@ public class DishServiceImpl implements DishService {
     
     @Override
     public void deleteDish(long id) {
-        repository.deleteById(getReferenceId(id));
+        repository.deleteById(validateId(id));
     }
     
     @Override
     public void softDeleteDish(long id) {
-        repository.softDelete(getReferenceId(id));
+        repository.softDelete(validateId(id));
     }
     
     private DishEntity findEntity(long id) {
@@ -76,13 +74,11 @@ public class DishServiceImpl implements DishService {
         });
     }
     
-    private long getReferenceId(long id) {
-        try {
-            return repository.getReferenceById(id).getId();
-        } catch (NoSuchElementException ex) {
+    private long validateId(long id) {
+        return repository.checkId(id).orElseGet(() -> {
             log.error("No such dish with id: '{}'", id);
             throw VoteException.badRequest(DISH_NOT_FOUND_ERROR);
-        }
+        });
     }
     
 }

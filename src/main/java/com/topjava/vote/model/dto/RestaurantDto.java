@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
-import static java.util.Collections.emptySet;
+import static java.util.Collections.emptyList;
 
 @Data
 @Builder
@@ -28,7 +30,7 @@ public class RestaurantDto {
     private String name;
     
     @JsonProperty(access = READ_ONLY)
-    private Set<DishDto> dishes = new HashSet<>();
+    private Set<DishDto> dishes;
     
     public static RestaurantDto fromEntity(RestaurantEntity entity) {
         if (entity == null) {
@@ -37,7 +39,7 @@ public class RestaurantDto {
         return RestaurantDto.builder()
                             .id(entity.getId())
                             .name(entity.getName())
-                            .dishes(DishDto.fromEntity(entity.getDishes()))
+                            .dishes(new HashSet<>(DishDto.fromEntity(entity.getDishes())))
                             .build();
     }
     
@@ -50,11 +52,11 @@ public class RestaurantDto {
                                .build();
     }
     
-    public static Set<RestaurantDto> fromEntity(Collection<RestaurantEntity> entities) {
+    public static List<RestaurantDto> fromEntity(Collection<RestaurantEntity> entities) {
         if (entities == null) {
-            return emptySet();
+            return emptyList();
         }
-        Set<RestaurantDto> resultList = new HashSet<>();
+        List<RestaurantDto> resultList = new ArrayList<>();
         entities.forEach(e -> resultList.add(fromEntity(e)));
         return resultList;
     }

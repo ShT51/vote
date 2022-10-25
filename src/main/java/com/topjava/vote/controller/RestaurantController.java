@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 import static com.topjava.vote.cache.VoteCacheManager.RESTAURANT_CACHE;
 
@@ -35,7 +34,7 @@ public class RestaurantController {
     @Operation(summary = "Get Restaurant list", tags = "restaurant")
     @Cacheable(RESTAURANT_CACHE)
     @GetMapping(value = "restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData<Set<RestaurantDto>> getRestaurants() {
+    public ResponseData<List<RestaurantDto>> getRestaurants() {
         return ResponseData.of(restaurantService.getRestaurants());
     }
     

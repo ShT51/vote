@@ -6,8 +6,9 @@ import com.topjava.vote.model.entity.UserEntity;
 import com.topjava.vote.model.entity.VoteEntity;
 import com.topjava.vote.model.response.RestaurantScore;
 import com.topjava.vote.repository.VoteRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,13 +20,24 @@ import java.util.List;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService {
     
-    public static final LocalTime VOTE_DEADLINE = LocalTime.of(11, 0);
+    public VoteServiceImpl(@NonNull UserService userService,
+                           @NonNull RestaurantService restaurantService,
+                           @NonNull VoteRepository voteRepository,
+                           @Value("${vote.deadlineHours}") int hours) {
+        
+        this.userService = userService;
+        this.restaurantService = restaurantService;
+        this.voteRepository = voteRepository;
+        this.voteDeadLine = LocalTime.of(hours, 0);
+    }
+    
+    private final LocalTime voteDeadLine;
     private final UserService userService;
     private final RestaurantService restaurantService;
     private final VoteRepository voteRepository;
+    
     
     @Override
     public void vote(long id, long restaurantId) {
@@ -49,6 +61,6 @@ public class VoteServiceImpl implements VoteService {
     }
     
     private boolean isRevotingAvailable() {
-        return LocalTime.now(Clock.systemUTC()).isBefore(VOTE_DEADLINE);
+        return LocalTime.now(Clock.systemUTC()).isBefore(voteDeadLine);
     }
 }

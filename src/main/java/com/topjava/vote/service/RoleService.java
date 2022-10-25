@@ -4,6 +4,4 @@ import com.topjava.vote.model.entity.RoleEntity;
 
 public interface RoleService {
     RoleEntity getUserRole();
-    
-    RoleEntity getAdminRole();
 }

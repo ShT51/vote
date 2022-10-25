@@ -7,6 +7,7 @@ import com.topjava.vote.service.DishService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -33,7 +34,7 @@ public class DishController {
     
     @Operation(summary = "Get Dish list", tags = "dish")
     @GetMapping(value = "admin/dishes", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData<Set<DishDto>> getDishes() {
+    public ResponseData<List<DishDto>> getDishes() {
         return ResponseData.of(dishService.getDishes());
     }
     
@@ -55,7 +56,7 @@ public class DishController {
     public ResponseData<Object> deleteDish(@PathVariable long id) {
         try {
             dishService.deleteDish(id);
-        } catch (Exception e) {
+        } catch (DataIntegrityViolationException e) {
             log.error("Try to remove dish: '{}'. Remove dish from restaurant", id);
             throw VoteException.badRequest("Remove dish from menu first!");
         }

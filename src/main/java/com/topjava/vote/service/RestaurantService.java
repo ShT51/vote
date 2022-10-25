@@ -4,14 +4,13 @@ import com.topjava.vote.model.dto.RestaurantDto;
 import com.topjava.vote.model.entity.RestaurantEntity;
 
 import java.util.List;
-import java.util.Set;
 
 public interface RestaurantService {
     RestaurantDto getRestaurant(long id);
     
     RestaurantEntity getRestaurantEntityLazy(long id);
     
-    Set<RestaurantDto> getRestaurants();
+    List<RestaurantDto> getRestaurants();
     
     void saveRestaurant(RestaurantDto restaurantDto);
     

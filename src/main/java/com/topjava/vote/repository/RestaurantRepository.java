@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Long> {
     
     @Query(value = """
-                   SELECT r FROM RestaurantEntity AS r
+                   SELECT DISTINCT r FROM RestaurantEntity AS r
                    LEFT JOIN FETCH r.dishes
                    """)
     List<RestaurantEntity> findAllWithDishes();
@@ -21,4 +21,10 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
                    WHERE r.id = ?1
                    """)
     Optional<RestaurantEntity> findWithDishesById(long id);
+    
+    @Query("""
+           SELECT r.id FROM RestaurantEntity AS r
+           WHERE r.id = ?1
+           """)
+    Optional<Long> checkId(long id);
 }

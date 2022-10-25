@@ -5,12 +5,11 @@ import com.topjava.vote.model.entity.DishEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 public interface DishService {
     
     DishDto getDishById(long id);
-    Set<DishDto> getDishes();
+    List<DishDto> getDishes();
     
     @Transactional(readOnly = true)
     List<DishEntity> getDishEntities(List<Long> ids);

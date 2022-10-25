@@ -12,7 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -30,7 +29,7 @@ public class DishEntity extends AbstractBaseNamedEntity {
     private double price;
     
     @ManyToMany(mappedBy = "dishes")
-    private Set<RestaurantEntity> restaurants = new HashSet<>();
+    private Set<RestaurantEntity> restaurants;
     
     @Column(name = "available", nullable = false, columnDefinition = "bool default true")
     private boolean available = true;

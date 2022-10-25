@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
-import static java.util.Collections.emptySet;
+import static java.util.Collections.emptyList;
 
 @Data
 @Builder
@@ -32,7 +32,7 @@ public class DishDto {
     private double price;
     
     @JsonProperty(access = READ_ONLY)
-    private boolean availability = true;
+    private boolean available = true;
     
     public static DishDto fromEntity(DishEntity entity) {
         if (entity == null) {
@@ -42,7 +42,7 @@ public class DishDto {
                       .id(entity.getId())
                       .name(entity.getName())
                       .price(entity.getPrice())
-                      .availability(entity.isAvailable())
+                      .available(entity.isAvailable())
                       .build();
     }
     
@@ -57,11 +57,11 @@ public class DishDto {
                          .build();
     }
     
-    public static Set<DishDto> fromEntity(Collection<DishEntity> entities) {
+    public static List<DishDto> fromEntity(Collection<DishEntity> entities) {
         if (entities == null) {
-            return emptySet();
+            return emptyList();
         }
-        Set<DishDto> resultList = new HashSet<>();
+        List<DishDto> resultList = new ArrayList<>();
         entities.forEach(e -> resultList.add(fromEntity(e)));
         return resultList;
     }

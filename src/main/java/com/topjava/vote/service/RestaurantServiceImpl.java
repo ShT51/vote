@@ -9,9 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -39,7 +37,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     
     @Override
     @Transactional(readOnly = true)
-    public Set<RestaurantDto> getRestaurants() {
+    public List<RestaurantDto> getRestaurants() {
         return RestaurantDto.fromEntity(restaurantRepository.findAllWithDishes());
     }
     
@@ -57,7 +55,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     
     @Override
     public void deleteRestaurant(long id) {
-        restaurantRepository.deleteById(getReferenceId(id));
+        restaurantRepository.deleteById(validateId(id));
     }
     
     @Override
@@ -88,13 +86,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         });
     }
     
-    private long getReferenceId(long id) {
-        try {
-            return restaurantRepository.getReferenceById(id).getId();
-        } catch (EntityNotFoundException ex) {
+    private long validateId(long id) {
+        return restaurantRepository.checkId(id).orElseGet(() -> {
             log.error(RESTAURANT_NOT_FOUND_LOG, id);
             throw VoteException.badRequest(RESTAURANT_NOT_FOUND_ERROR);
-        }
+        });
     }
     
 }

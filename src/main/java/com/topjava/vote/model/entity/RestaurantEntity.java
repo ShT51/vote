@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +35,7 @@ public class RestaurantEntity extends AbstractBaseNamedEntity {
                joinColumns = @JoinColumn(name = "restaurant_id"),
                inverseJoinColumns = @JoinColumn(name = "dish_id")
     )
-    private Set<DishEntity> dishes = new HashSet<>();
+    private Set<DishEntity> dishes;
     
     public void addDishes(Collection<DishEntity> newDishes) {
         dishes.addAll(newDishes);
