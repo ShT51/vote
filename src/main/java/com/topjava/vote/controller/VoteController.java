@@ -7,6 +7,7 @@ import com.topjava.vote.service.VoteService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +29,7 @@ public class VoteController {
     
     @Operation(summary = "Vote for the favorite Restaurant for today", tags = "vote")
     @PostMapping("/vote")
+    @CacheEvict(cacheNames = VOTE_CACHE, allEntries = true)
     public ResponseData<Object> voteForRestaurant(@AuthenticationPrincipal AuthenticatedUser user,
                                                   @RequestParam(name = "restaurantId") long id) {
         voteService.vote(user.getUserId(), id);

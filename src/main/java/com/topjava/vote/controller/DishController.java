@@ -7,6 +7,7 @@ import com.topjava.vote.service.DishService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static com.topjava.vote.cache.VoteCacheManager.RESTAURANT_CACHE;
 
 @Slf4j
 @RestController
@@ -46,6 +49,7 @@ public class DishController {
     }
     
     @Operation(summary = "Update Dish data", tags = "dish")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @PutMapping(value = "admin/dishes/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<DishDto> updateDish(@PathVariable long id, @RequestBody @Valid DishDto dishDto) {
         return ResponseData.of(dishService.updateDish(id, dishDto));
@@ -64,6 +68,7 @@ public class DishController {
     }
     
     @Operation(summary = "Delete Dish soft", tags = "dish")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @DeleteMapping(value = "admin/dishes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<Object> softDeleteDish(@PathVariable long id) {
         dishService.softDeleteDish(id);

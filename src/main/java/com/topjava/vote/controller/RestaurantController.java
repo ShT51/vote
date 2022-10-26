@@ -5,6 +5,7 @@ import com.topjava.vote.model.response.ResponseData;
 import com.topjava.vote.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,6 +40,7 @@ public class RestaurantController {
     }
     
     @Operation(summary = "Create Restaurant", tags = "restaurant")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @PostMapping(value = "admin/restaurants", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<Object> createRestaurant(@RequestBody @Valid RestaurantDto restaurantDto) {
         restaurantService.saveRestaurant(restaurantDto);
@@ -46,12 +48,14 @@ public class RestaurantController {
     }
     
     @Operation(summary = "Update Restaurant data", tags = "restaurant")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @PutMapping(value = "admin/restaurants/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<RestaurantDto> updateRestaurant(@PathVariable long id, @RequestBody @Valid RestaurantDto restaurantDto) {
         return ResponseData.of(restaurantService.updateRestaurant(id, restaurantDto));
     }
     
     @Operation(summary = "Delete Restaurant", tags = "restaurant")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @DeleteMapping(value = "admin/restaurants/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<Object> deleteRestaurant(@PathVariable long id) {
         restaurantService.deleteRestaurant(id);
@@ -59,12 +63,14 @@ public class RestaurantController {
     }
     
     @Operation(summary = "Add dishes to the Restaurant", tags = "restaurant")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @PostMapping(value = "admin/restaurants/{id}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<RestaurantDto> addToMenu(@PathVariable long id, @RequestBody List<Long> dishIds) {
         return ResponseData.of(restaurantService.addToMenu(id, dishIds));
     }
     
     @Operation(summary = "Delete dishes from the Restaurant", tags = "restaurant")
+    @CacheEvict(value = RESTAURANT_CACHE, allEntries = true)
     @DeleteMapping(value = "admin/restaurants/{id}/dishes", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData<RestaurantDto> removeFromMenu(@PathVariable long id, @RequestBody List<Long> dishIds) {
         return ResponseData.of(restaurantService.removeFromMenu(id, dishIds));
